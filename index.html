@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kantina — La street food raffinée · Strasbourg</title>
+<meta name="description" content="Kantina, la street food raffinée : gyros, souvlaki, frites feta-origan. Cuisine grecque et française, food truck près de Strasbourg.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1340c7;--bg2:#0b2790;--acc:#ffc737;--acc2:#ff5a36;--ink:#14110f;--cream:#f7f2e5;--olive:#8aa83a;
+  --display:"Bowlby One","Impact","Arial Black",sans-serif;--body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --pad:clamp(18px,4vw,56px);
+}
+body[data-theme=terra]{--bg:#d9421f;--bg2:#8f2310;--acc:#ffc737;--acc2:#1340c7}
+body[data-theme=olive]{--bg:#3f5d17;--bg2:#243a0a;--acc:#ffd24a;--acc2:#ff6a3d}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:var(--body);background:var(--bg);color:var(--cream);overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background .6s}
+svg,img{display:block;max-width:100%}a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.d{font-family:var(--display);text-transform:uppercase;line-height:.92;letter-spacing:.005em;font-weight:400}
+.wrap{padding-inline:var(--pad);max-width:1440px;margin-inline:auto}
+main{overflow-x:clip}
+
+/* ---------- sticker UI ---------- */
+.btn{display:inline-flex;align-items:center;gap:.6em;font-family:var(--display);text-transform:uppercase;font-size:clamp(15px,1.5vw,19px);padding:.85em 1.4em .8em;background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-radius:16px;box-shadow:4px 5px 0 var(--ink);transition:transform .15s,box-shadow .15s,background .2s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:7px 8px 0 var(--ink);background:var(--acc)}
+.btn:active{transform:translate(3px,4px);box-shadow:1px 1px 0 var(--ink)}
+.btn.y{background:var(--acc)}.btn.y:hover{background:var(--cream)}
+.stroke{color:var(--cream);-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:5px 6px 0 var(--ink)}
+
+/* ---------- loader cinématique ---------- */
+#loader{position:fixed;inset:0;z-index:200;display:grid;place-items:center}
+#loader.out{visibility:hidden;transition:visibility 0s 1.6s}
+#loader .pn{position:absolute;left:0;right:0;height:50.5%;background:var(--acc);transition:transform 1.1s cubic-bezier(.77,0,.18,1) .35s}
+#loader .t{top:0;border-bottom:3px solid var(--ink)}#loader .b{bottom:0;border-top:3px solid var(--ink)}
+#loader.out .t{transform:translateY(-101%)}#loader.out .b{transform:translateY(101%)}
+#loader b{position:relative;z-index:2;font-family:var(--display);font-size:clamp(40px,13vw,150px);color:var(--cream);-webkit-text-stroke:3px var(--ink);text-shadow:6px 7px 0 var(--ink);animation:lz 1s cubic-bezier(.2,.8,.2,1) both;transition:opacity .5s,transform .8s cubic-bezier(.7,0,.2,1),filter .5s}
+#loader.out b{opacity:0;transform:scale(2.2);filter:blur(10px)}
+@keyframes lz{from{transform:scale(.4) rotate(-8deg);opacity:0}}
+#loader .cnt{position:absolute;z-index:2;top:calc(50% + clamp(40px,9vw,90px));font-family:var(--display);font-size:16px;color:var(--ink);transition:opacity .3s}
+#loader .bar{position:absolute;z-index:2;left:var(--pad);right:var(--pad);bottom:7vh;height:14px;border:3px solid var(--ink);border-radius:9px;background:var(--cream);overflow:hidden;transition:opacity .3s}
+#loader .bar u{display:block;height:100%;background:var(--ink);transform:scaleX(0);transform-origin:left}
+#loader.out .cnt,#loader.out .bar{opacity:0}
+.lb{position:fixed;left:0;right:0;height:10vh;background:var(--ink);z-index:150;pointer-events:none;transition:transform 1.5s cubic-bezier(.7,0,.2,1) 2.4s}
+.lb.t{top:0}.lb.b{bottom:0}
+body.go .lb.t{transform:translateY(-101%)}body.go .lb.b{transform:translateY(101%)}
+
+/* ---------- header (logo réduit) ---------- */
+header{position:fixed;inset:0 0 auto 0;z-index:60;height:68px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:background .3s,height .3s,border-color .3s}
+header.sc{background:var(--bg);border-color:var(--ink);height:58px}
+header .wrap{display:flex;justify-content:space-between;align-items:center;width:100%}
+.logo{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:22px;letter-spacing:.02em;color:var(--cream);-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill;text-shadow:2px 3px 0 var(--ink)}
+.logo svg{width:20px;height:20px}.logo img{height:30px;width:auto}
+nav.desk{display:flex;gap:4px}
+nav.desk a{font-family:var(--display);text-transform:uppercase;font-size:14px;padding:.7em 1em .6em;border-radius:12px;border:2px solid transparent;transition:.15s}
+nav.desk a:hover,nav.desk a.on{background:var(--cream);color:var(--ink);border-color:var(--ink);box-shadow:2px 3px 0 var(--ink)}
+.hr{display:flex;gap:8px}
+.ib{width:42px;height:42px;border-radius:50%;background:var(--cream);color:var(--ink);border:3px solid var(--ink);box-shadow:2px 3px 0 var(--ink);display:grid;place-items:center;transition:.15s}
+.ib:hover{background:var(--acc);transform:translate(-1px,-1px)}.ib svg{width:20px;height:20px}
+#bb{display:none}
+.mm{position:fixed;inset:0;z-index:80;background:var(--acc);color:var(--ink);display:flex;flex-direction:column;justify-content:center;gap:6px;padding:90px var(--pad) 40px;transform:translateY(-102%);visibility:hidden;transition:transform .55s cubic-bezier(.7,0,.2,1),visibility 0s .55s}
+.mm.open{transform:none;visibility:visible;transition:transform .55s cubic-bezier(.7,0,.2,1)}
+.mm a{font-family:var(--display);text-transform:uppercase;font-size:clamp(46px,14vw,90px);line-height:1;color:var(--cream);-webkit-text-stroke:3px var(--ink);text-shadow:4px 5px 0 var(--ink)}
+.mm .ib{position:absolute;top:14px;right:var(--pad)}
+.mm p{font-weight:700;margin-top:18px}
+
+/* ---------- hero 4D ---------- */
+.hero{position:relative;height:100svh;min-height:640px;display:grid;place-items:center;overflow:hidden;perspective:1400px}
+.glow{position:absolute;inset:-20%;background:radial-gradient(40% 40% at 50% 55%,color-mix(in srgb,var(--acc) 38%,transparent),transparent 70%),radial-gradient(30% 30% at 20% 20%,color-mix(in srgb,var(--acc2) 30%,transparent),transparent 70%);pointer-events:none}
+.grid3d{position:absolute;left:-50%;right:-50%;bottom:-8%;height:60%;background:linear-gradient(transparent 0 0),repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 2px,transparent 2px 90px),repeating-linear-gradient(0deg,rgba(255,255,255,.14) 0 2px,transparent 2px 70px);transform:rotateX(68deg);transform-origin:50% 100%;animation:gr 4s linear infinite;mask-image:linear-gradient(transparent,#000 70%);-webkit-mask-image:linear-gradient(transparent,#000 70%);pointer-events:none}
+@keyframes gr{to{background-position:0 0,0 0,0 70px}}
+.fl{position:absolute;left:var(--x);top:var(--y);width:var(--w);will-change:transform;pointer-events:none}
+.fl>svg{width:100%;animation:bob var(--t,6s) ease-in-out infinite;animation-delay:var(--dl,0s);filter:drop-shadow(4px 6px 0 rgba(0,0,0,.55))}
+@keyframes bob{50%{transform:translateY(-16px) rotate(8deg)}}
+.hero-title{position:absolute;left:0;right:0;top:15%;text-align:center;font-size:14vw;white-space:nowrap;line-height:.8;pointer-events:none;will-change:transform,opacity;transform-style:preserve-3d}
+.hero-title span{display:inline-block;opacity:0}
+body.go .hero-title span{animation:letter 1.3s cubic-bezier(.2,.9,.2,1) forwards;animation-delay:calc(var(--k)*.1s + 1.3s)}
+body[data-motion=off] .hero-title span{opacity:1}
+@keyframes letter{0%{transform:translateZ(-700px) translateY(50%) rotateX(-75deg) scale(1.7);opacity:0;filter:blur(18px)}55%{opacity:1}100%{transform:none;opacity:1;filter:blur(0)}}
+.scene{--cw:220px;--ch:272px;--R:320px;position:absolute;left:50%;top:31%;margin-left:calc(var(--cw)/-2);width:var(--cw);height:var(--ch);transform-style:preserve-3d;will-change:transform}
+.ring{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.it{position:absolute;inset:0;transform:rotateY(calc(var(--i)*60deg)) translateZ(var(--R));backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.it .cd{width:100%;height:100%;background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-radius:26px;box-shadow:6px 8px 0 var(--ink);padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;user-select:none}
+.it .cd svg{width:100%;flex:1;min-height:0}
+.it .cd b{font-family:var(--display);text-transform:uppercase;font-size:clamp(14px,1.5vw,19px);line-height:1}
+.it .cd small{font-weight:700;font-size:11px;opacity:.65}
+.hero-sub{position:absolute;bottom:clamp(22px,5vh,54px);left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding-inline:var(--pad);z-index:5}
+.hero-sub p{font-weight:700;font-size:clamp(14px,1.4vw,18px);max-width:46ch;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.hint{position:absolute;right:var(--pad);bottom:28px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.8;writing-mode:vertical-rl}
+.drag{cursor:grab}.drag:active{cursor:grabbing}
+
+.hero-sub{opacity:0;transform:translateY(34px);transition:opacity 1s 3.2s,transform 1s 3.2s}
+body.go .hero-sub{opacity:1;transform:none}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.4) 50%,transparent 62%);transform:translateX(-120%);pointer-events:none;z-index:4}
+body.go .hero::after{animation:sweep 1.8s ease-out 2.6s both}
+@keyframes sweep{to{transform:translateX(120%)}}
+.glow{opacity:0;transition:opacity 2s .6s}body.go .glow{opacity:1}
+/* marquee */
+.mq{background:var(--acc);color:var(--ink);border-block:3px solid var(--ink);overflow:hidden;white-space:nowrap;padding:14px 0 10px;transform:rotate(-1.4deg);margin:-20px -12px 0;position:relative;z-index:6}
+.mq div{display:inline-block;will-change:transform;font-family:var(--display);text-transform:uppercase;font-size:clamp(24px,3.4vw,44px)}
+.mq span{margin-inline:.45em}.mq em{font-style:normal;color:var(--acc2)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* big scroll word */
+.bigword{font-size:clamp(90px,24vw,360px);white-space:nowrap;color:transparent;-webkit-text-stroke:3px color-mix(in srgb,var(--cream) 40%,transparent);transform:translateX(calc((var(--p,.5) - .5) * -60vw));line-height:.85;pointer-events:none;user-select:none}
+
+/* ---------- menu ---------- */
+#carte{background:var(--cream);color:var(--ink);padding:100px 0 120px;border-bottom:3px solid var(--ink);position:relative;overflow:hidden}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:36px}
+.sh h2{font-size:clamp(50px,9vw,128px)}.sh p{max-width:38ch;font-weight:700}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px}
+.tab{font-family:var(--display);text-transform:uppercase;font-size:15px;padding:.8em 1.2em .7em;border:3px solid var(--ink);border-radius:14px;background:var(--cream);box-shadow:3px 4px 0 var(--ink);transition:.15s}
+.tab:hover{background:var(--acc)}
+.tab[aria-selected=true]{background:var(--bg);color:var(--cream);transform:translate(2px,3px);box-shadow:1px 1px 0 var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;perspective:1200px}
+.card{position:relative;text-align:left;background:var(--acc);border:3px solid var(--ink);border-radius:26px;box-shadow:7px 8px 0 var(--ink);padding:18px 20px 22px;display:flex;flex-direction:column;gap:8px;transform-style:preserve-3d;transition:transform .25s ease-out,box-shadow .25s;will-change:transform;animation:cin .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--k)*.07s)}
+@keyframes cin{from{opacity:0;transform:translateY(40px) rotateX(-25deg)}}
+.card:nth-child(3n+2){background:var(--cream)}.card:nth-child(3n){background:color-mix(in srgb,var(--olive) 70%,#fff)}
+.card .ar{aspect-ratio:1.25;transform:translateZ(50px);margin-bottom:4px}
+.card .ar svg{width:100%;height:100%;filter:drop-shadow(5px 6px 0 rgba(0,0,0,.8))}
+.card h3{font-size:clamp(22px,2.2vw,30px);transform:translateZ(30px)}
+.card p{font-weight:500;font-size:14px;line-height:1.4;transform:translateZ(20px)}
+.card .tg{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.card .tg i{font-style:normal;font-weight:700;font-size:11px;background:var(--cream);border:2px solid var(--ink);border-radius:99px;padding:.25em .7em}
+.card .pr{position:absolute;right:16px;top:16px;font-family:var(--display);font-size:22px;background:var(--cream);border:3px solid var(--ink);border-radius:12px;padding:.25em .5em .15em;box-shadow:3px 3px 0 var(--ink);transform:translateZ(60px) rotate(6deg);display:none}
+body.prices .card .pr{display:block}
+.card .sg{position:absolute;left:-10px;top:14px;background:var(--acc2);color:var(--cream);font-family:var(--display);font-size:12px;text-transform:uppercase;padding:.5em .9em .4em;border:3px solid var(--ink);border-radius:10px;transform:translateZ(70px) rotate(-8deg);box-shadow:3px 3px 0 var(--ink)}
+.glare{position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(240px circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.55),transparent 60%);opacity:0;transition:opacity .25s}
+.card:hover .glare{opacity:.8}
+
+/* modal */
+.mo{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(4px)}
+.mo.open{display:flex}
+.mb{background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-radius:30px;box-shadow:10px 12px 0 var(--ink);max-width:860px;width:100%;padding:clamp(20px,3vw,40px);display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;position:relative;animation:mp .4s cubic-bezier(.2,.9,.2,1)}
+@keyframes mp{from{opacity:0;transform:scale(.85) rotateX(20deg)}}
+.mb .ar svg{filter:drop-shadow(6px 8px 0 rgba(0,0,0,.8));animation:bob 5s ease-in-out infinite}
+.mb h3{font-size:clamp(34px,5vw,60px);margin-bottom:10px;color:var(--cream);-webkit-text-stroke:2.5px var(--ink);text-shadow:4px 4px 0 var(--ink)}
+.mb p{font-weight:500;margin-bottom:14px}
+.mb .tg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}.mb .tg i{font-style:normal;font-weight:700;font-size:12px;background:var(--acc);border:2px solid var(--ink);border-radius:99px;padding:.3em .8em}
+.mb .ib{position:absolute;right:14px;top:14px}
+
+/* ---------- story ---------- */
+#chef{background:var(--bg2);padding:110px 0 130px;border-bottom:3px solid var(--ink);position:relative;overflow:hidden}
+#chef .bigword{position:absolute;top:30px;left:0}
+.story{position:relative;display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(24px,5vw,80px);align-items:center}
+.story h2{font-size:clamp(46px,7.4vw,108px);margin-bottom:22px}
+.story p{font-weight:500;font-size:clamp(16px,1.4vw,19px);max-width:46ch;margin-bottom:14px;opacity:.95}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;perspective:1000px}
+.ing{background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-radius:24px;box-shadow:6px 8px 0 var(--ink);padding:18px 14px 20px;text-align:center;transform:rotateX(calc((.5 - var(--p,.5))*50deg)) translateY(calc((var(--p,.5) - .5)*-50px));transition:background .2s}
+.ing:nth-child(2){background:var(--acc)}.ing:nth-child(3){background:color-mix(in srgb,var(--olive) 65%,#fff)}
+.ing svg{width:70%;margin:0 auto 10px;animation:bob 5s ease-in-out infinite}
+.ing b{display:block;font-family:var(--display);text-transform:uppercase;font-size:clamp(16px,1.8vw,24px);line-height:1}
+.ing small{font-weight:700;font-size:12px}
+
+/* ---------- contact ---------- */
+#contact{background:var(--acc);color:var(--ink);padding:100px 0 34px;position:relative;overflow:hidden}
+#contact .bigword{-webkit-text-stroke-color:color-mix(in srgb,var(--ink) 35%,transparent);position:absolute;top:10px;left:0}
+.ct{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,4vw,60px)}
+.ct h2{font-size:clamp(46px,7.4vw,104px);margin-bottom:24px}
+.ct ul{list-style:none;display:grid;gap:12px;margin-bottom:24px}
+.ct li a{display:flex;gap:12px;align-items:center;font-weight:700;font-size:clamp(16px,1.6vw,20px);background:var(--cream);border:3px solid var(--ink);border-radius:16px;padding:.8em 1em;box-shadow:4px 5px 0 var(--ink);transition:.15s}
+.ct li a:hover{transform:translate(-2px,-2px);box-shadow:7px 8px 0 var(--ink);background:var(--bg);color:var(--cream)}
+.ct li svg{width:22px;height:22px;flex:none}
+form.ev{background:var(--cream);border:3px solid var(--ink);border-radius:28px;box-shadow:8px 10px 0 var(--ink);padding:clamp(18px,3vw,32px);display:grid;grid-template-columns:1fr 1fr;gap:14px}
+form.ev h3{grid-column:1/-1;font-size:clamp(24px,3vw,36px)}
+form.ev p{grid-column:1/-1;font-weight:500;font-size:14px;margin-top:-6px}
+label{display:grid;gap:6px;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+label.w{grid-column:1/-1}
+input,select,textarea{font:inherit;font-weight:500;padding:.75em .95em;border:3px solid var(--ink);border-radius:13px;background:#fff;width:100%;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:0;background:#fff7d6}
+form.ev .btn{grid-column:1/-1;justify-content:center}
+footer{position:relative;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:70px;padding-top:20px;border-top:3px solid var(--ink);font-weight:700;font-size:13px}
+footer .logo{font-size:17px;color:var(--cream)}footer .logo svg{width:16px;height:16px}
+footer nav{display:flex;gap:18px}
+
+/* ---------- customizer ---------- */
+#cz{position:fixed;left:14px;bottom:14px;z-index:70}
+#czb{width:48px;height:48px}
+#czp{position:absolute;left:0;bottom:58px;width:260px;background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-radius:20px;box-shadow:6px 7px 0 var(--ink);padding:16px;display:none;gap:12px}
+#czp.open{display:grid}
+#czp h4{font-family:var(--display);font-size:15px;text-transform:uppercase}
+.sw{display:flex;gap:8px}.sw button{width:40px;height:40px;border-radius:50%;border:3px solid var(--ink);box-shadow:2px 3px 0 var(--ink)}
+.sw button[aria-pressed=true]{outline:3px solid var(--acc2);outline-offset:2px}
+.sg2{display:flex;gap:6px}.sg2 button{flex:1;font-weight:700;font-size:12px;padding:.55em .3em;border:2px solid var(--ink);border-radius:10px;background:#fff}
+.sg2 button[aria-pressed=true]{background:var(--ink);color:var(--cream)}
+
+/* cursor */
+#cur{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:3px solid var(--ink);background:color-mix(in srgb,var(--acc) 70%,transparent);border-radius:50%;pointer-events:none;z-index:300;transition:width .2s,height .2s,margin .2s,background .2s;display:none}
+#cur.h{width:62px;height:62px;margin:-31px 0 0 -31px;background:color-mix(in srgb,var(--acc2) 55%,transparent)}
+@media(hover:hover) and (pointer:fine){#cur{display:block}}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(46px) rotateX(-12deg);transition:opacity .8s,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+body[data-motion=off] *,body[data-motion=off] *::before{animation:none!important;transition:none!important}
+body[data-motion=off] .rv{opacity:1;transform:none}
+
+@media(max-width:900px){
+  nav.desk{display:none}#bb{display:grid}
+  .grid{grid-template-columns:1fr 1fr}.story,.ct,.mb{grid-template-columns:1fr}
+  .hint{display:none}
+}
+@media(max-width:600px){
+  .trio{grid-template-columns:1fr}
+  form.ev{grid-template-columns:1fr}
+  .hero{min-height:700px}.hero-title{top:15%}
+  .scene{--cw:160px;--ch:204px;--R:205px;top:27%}
+  .ib{width:36px;height:36px}.ib svg{width:18px;height:18px}.logo{font-size:19px}
+  #carte{padding:60px 0 80px}
+  .sh{margin-bottom:18px}.sh h2{font-size:clamp(38px,13vw,56px)}.sh p{font-size:12.5px}
+  .tabs{gap:7px;margin-bottom:18px}
+  .tab{font-size:11px;padding:.6em .9em .5em;border-width:2px;border-radius:10px;box-shadow:2px 3px 0 var(--ink)}
+  .grid{grid-template-columns:1fr 1fr;gap:12px}
+  .card{padding:10px 10px 12px;border-width:2px;border-radius:18px;box-shadow:4px 5px 0 var(--ink);gap:3px}
+  .card .ar{aspect-ratio:1.15}
+  .card h3{font-size:15px}.card p{font-size:11.5px;line-height:1.3}
+  .card .tg i{font-size:9.5px;border-width:1.5px}
+  .card .sg{font-size:9px;left:-6px;top:8px;border-width:2px;padding:.4em .6em .3em}
+  .card .pr{font-size:14px;right:8px;top:8px}
+  .btn{font-size:14px;border-width:2.5px}
+  .mb .ar{max-width:190px;margin:0 auto}
+}
+</style>
+</head>
+<body data-theme="egee" data-motion="full">
+
+<div id="loader"><i class="pn t"></i><i class="pn b"></i><b>Kantina</b><span class="cnt" id="cnt">0%</span><span class="bar"><u id="bar"></u></span></div>
+<div class="lb t"></div><div class="lb b"></div>
+<div id="cur"></div>
+
+<header id="hd"><div class="wrap">
+  <a class="logo" href="#top" aria-label="Kantina — accueil" id="logo"></a>
+  <nav class="desk" aria-label="Navigation"><a href="#carte">La carte</a><a href="#chef">Le chef</a><a href="#contact">Contact</a></nav>
+  <div class="hr"><a class="ib" href="tel:+33745148098" aria-label="Appeler Kantina"><svg viewBox="0 0 24 24" fill="none" stroke="#14110f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></a>
+  <button class="ib" id="bb" aria-label="Ouvrir le menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="#14110f" stroke-width="3" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+</div></header>
+
+<div class="mm" id="mm" role="dialog" aria-modal="true" aria-label="Menu">
+  <button class="ib" id="mx" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="#14110f" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <a href="#carte">La carte</a><a href="#chef">Le chef</a><a href="#contact">Contact</a>
+  <p>La street food raffinée · Strasbourg</p>
+</div>
+
+<main id="top">
+<section class="hero" id="hero">
+  <div class="glow"></div><div class="grid3d"></div>
+  <div id="floaters" aria-hidden="true"></div>
+  <h1 class="hero-title d stroke" id="ht" aria-label="Kantina"></h1>
+  <div class="scene" id="scene"><div class="ring drag" id="ring"></div></div>
+  <div class="hero-sub">
+    <p>La street food raffinée. Cuisine grecque et française : huile d'olive, origan, feta, tout est fait minute.</p>
+    <div class="cta"><a class="btn y" href="#carte">Voir la carte</a><a class="btn" href="#contact">Nous trouver</a></div>
+  </div>
+  <span class="hint" aria-hidden="true">Glissez · Faites tourner</span>
+</section>
+
+<div class="mq" aria-hidden="true"><div id="mqi"></div></div>
+
+<section id="carte">
+  <div class="wrap">
+    <div class="sh rv"><h2 class="d">La carte</h2><p>Cliquez sur un plat pour le voir de plus près. Personnalisez l'affichage avec le bouton ✎ en bas à gauche.</p></div>
+    <div class="tabs rv" id="tabs" role="tablist"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="chef" data-p>
+  <div class="bigword d" data-p aria-hidden="true">Olive · Origan · Feta</div>
+  <div class="wrap story" style="padding-top:90px">
+    <div class="rv">
+      <h2 class="d stroke">Grèce<br>x France</h2>
+      <p>Derrière Kantina, le chef Savvas, né en Grèce, qui marie les saveurs méditerranéennes et françaises dans un esprit street food.</p>
+      <p>Des produits simples, bien assaisonnés, cuits à la minute et servis sans chichi : le raffinement est dans l'assiette, pas dans le décor.</p>
+      <a class="btn y" href="#contact" style="margin-top:12px">Privatiser Kantina</a>
+    </div>
+    <div class="trio" id="trio"></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="bigword d" data-p aria-hidden="true">Kantina</div>
+  <div class="wrap ct" style="padding-top:80px">
+    <div class="rv">
+      <h2 class="d">On vous<br>attend</h2>
+      <ul id="clist"></ul>
+    </div>
+    <form class="ev rv" id="ev">
+      <h3 class="d">Un événement ?</h3>
+      <p>Mariage, entreprise, anniversaire : demandez un devis gratuit pour le food truck.</p>
+      <label>Nom<input name="n" required placeholder="Votre nom" autocomplete="name"></label>
+      <label>Téléphone<input name="t" type="tel" placeholder="06 ..." autocomplete="tel"></label>
+      <label>Date souhaitée<input name="d" type="date"></label>
+      <label>Invités<select name="g"><option>-30</option><option>30-60</option><option>60-100</option><option>100+</option></select></label>
+      <label class="w">Message<textarea name="m" rows="3" placeholder="Type d'événement, lieu…"></textarea></label>
+      <button class="btn y" type="submit">Envoyer par SMS</button>
+    </form>
+  </div>
+  <div class="wrap"><footer>
+    <a class="logo" href="#top" id="flogo" aria-label="Kantina"></a>
+    <span>© 2026 Kantina — La street food raffinée</span>
+    <nav><a href="#carte">Carte</a><a href="#chef">Chef</a><a href="#contact">Contact</a></nav>
+  </footer></div>
+</section>
+</main>
+
+<div class="mo" id="mo" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="mb">
+  <button class="ib" id="mxx" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="#14110f" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <div class="ar" id="ma"></div>
+  <div><h3 class="d" id="mt"></h3><p id="md"></p><div class="tg" id="mg"></div><a class="btn y" href="#contact" id="mgo">Nous contacter</a></div>
+</div></div>
+
+<div id="cz">
+  <div id="czp" role="group" aria-label="Personnaliser">
+    <h4>Thème</h4>
+    <div class="sw"><button data-t="egee" style="background:#1340c7" aria-label="Égée" aria-pressed="true"></button><button data-t="terra" style="background:#d9421f" aria-label="Terre cuite" aria-pressed="false"></button><button data-t="olive" style="background:#3f5d17" aria-label="Olive" aria-pressed="false"></button></div>
+    <h4>Prix sur la carte</h4>
+    <div class="sg2" id="czpr"><button data-v="1" aria-pressed="false">Afficher</button><button data-v="0" aria-pressed="true">Masquer</button></div>
+    <h4>Animations</h4>
+    <div class="sg2" id="czm"><button data-v="full" aria-pressed="true">Intense</button><button data-v="soft" aria-pressed="false">Douce</button><button data-v="off" aria-pressed="false">Off</button></div>
+  </div>
+  <button class="ib" id="czb" aria-label="Personnaliser l'affichage" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="#14110f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg></button>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIG KANTINA — modifiez ici le contenu du site
+   (noms, descriptions, prix, produits phares, contacts, logo)
+   art : gyros | souvlaki | frites | salade | mezze | baklava | frappe
+   sig : true = badge « Signature »
+   ===================================================================== */
+const KANTINA={
+  nom:"Kantina",
+  logoUrl:"",                     // collez ici l'adresse du vrai logo (sinon le logo texte est utilisé)
+  telephone:"07 45 14 80 98",
+  instagram:"https://www.instagram.com/kantina.strasbourg/",
+  facebook:"https://www.facebook.com/kantina.strasbourg",
+  ville:"Oberhausbergen · Strasbourg",
+  afficherPrix:false,              // true pour montrer les prix
+  categories:[
+    {id:"pitas",label:"Pitas & Gyros",items:[
+      {n:"Gyros Kantina",d:"Poulet mariné à l'origan, tomate, oignon rouge, tzatziki et frites glissées dans la pita.",t:["Signature","Origan","Tzatziki"],p:"9,50€",art:"gyros",sig:true},
+      {n:"Pita Souvlaki",d:"Brochette grillée, salade croquante, tomate, sauce yaourt-citron.",t:["Grillé","Citron"],p:"9€",art:"gyros"},
+      {n:"Pita Halloumi",d:"Halloumi doré, légumes frais, miel-thym. Version végétarienne.",t:["Végétarien","Miel-thym"],p:"8,50€",art:"gyros"}]},
+    {id:"brochettes",label:"Brochettes",items:[
+      {n:"Souvlaki Poulet",d:"Deux brochettes de poulet mariné, grillées à la flamme, pita et citron.",t:["Signature","Flamme"],p:"10€",art:"souvlaki",sig:true},
+      {n:"Souvlaki Bœuf",d:"Bœuf tendre, poivron et oignon, huile d'olive et origan.",t:["Bœuf","Huile d'olive"],p:"11€",art:"souvlaki"},
+      {n:"Brochette Halloumi",d:"Halloumi et légumes grillés, menthe fraîche.",t:["Végétarien"],p:"9€",art:"souvlaki"}]},
+    {id:"frites",label:"Frites & Sides",items:[
+      {n:"Frites Feta-Origan",d:"Frites dorées, feta émiettée, origan et filet d'huile d'olive.",t:["Signature","Feta","Origan"],p:"6€",art:"frites",sig:true},
+      {n:"Frites Maison",d:"Pommes de terre coupées main, sel de mer.",t:["Végétarien"],p:"4€",art:"frites"},
+      {n:"Tzatziki & Pita",d:"Yaourt grec, concombre, ail et aneth, pita grillée.",t:["Frais","Végétarien"],p:"5€",art:"mezze"}]},
+    {id:"salades",label:"Salades & Mezze",items:[
+      {n:"Salade Grecque",d:"Tomate, concombre, olives, oignon rouge, grand bloc de feta et origan.",t:["Frais","Feta"],p:"9€",art:"salade"},
+      {n:"Houmous & Pita",d:"Pois chiches, tahini, citron, huile d'olive.",t:["Végétarien"],p:"5€",art:"mezze"}]},
+    {id:"desserts",label:"Desserts",items:[
+      {n:"Baklava",d:"Pâte filo croustillante, pistaches, sirop de miel.",t:["Miel","Pistache"],p:"4,50€",art:"baklava"},
+      {n:"Yaourt grec & miel",d:"Yaourt grec épais, miel, noix.",t:["Noix","Miel"],p:"4€",art:"baklava"}]},
+    {id:"boissons",label:"Boissons",items:[
+      {n:"Frappé grec",d:"Café glacé mousseux, à la grecque, sucré à votre goût.",t:["Café"],p:"4€",art:"frappe"},
+      {n:"Limonade maison",d:"Citron pressé, menthe, un peu de miel.",t:["Frais"],p:"3,50€",art:"frappe"}]}
+  ]
+};
+/* ===================================================================== */
+
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const K='stroke="#14110f" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"';
+const k4=K.replace('6','4');
+const ART={
+gyros:`<svg viewBox="0 0 400 400" fill="none"><path d="M92 176c-18-42 14-78 46-66 6-38 62-46 80-10 34-18 74 6 66 46 22 6 24 40-8 44z" fill="#8aa83a" ${K}/><circle cx="150" cy="140" r="24" fill="#e2552b" ${K}/><circle cx="236" cy="124" r="21" fill="#e2552b" ${K}/><ellipse cx="290" cy="168" rx="34" ry="18" fill="#f7f2e5" ${K}/><g fill="#8a4a22" ${k4}><rect x="116" y="150" width="76" height="26" rx="13" transform="rotate(-12 116 150)"/><rect x="200" y="146" width="70" height="26" rx="13" transform="rotate(14 200 146)"/></g><path d="M78 182Q200 128 322 182L268 374Q200 396 132 374Z" fill="#f2b861" ${K}/><path d="M96 190Q200 150 304 190" stroke="#c98b4a" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M122 262h156l-14 108Q200 392 136 370z" fill="#2f6bff" ${K}/><path d="M200 282l34 38-34 38-34-38z" fill="#f7f2e5" ${K}/></svg>`,
+souvlaki:`<svg viewBox="0 0 400 400" fill="none"><g transform="translate(0 52)"><path d="M40 330L350 40" stroke="#c98b4a" stroke-width="12" stroke-linecap="round"/><path d="M40 330L350 40" stroke="#14110f" stroke-width="4" stroke-linecap="round" opacity=".35"/>
+<g ${k4}><g transform="translate(96 272) rotate(-43)"><rect x="-30" y="-28" width="60" height="56" rx="12" fill="#8a4a22"/></g><g transform="translate(148 224) rotate(-43)"><rect x="-24" y="-28" width="48" height="56" rx="14" fill="#8aa83a"/></g><g transform="translate(200 176) rotate(-43)"><rect x="-30" y="-28" width="60" height="56" rx="12" fill="#8a4a22"/></g><g transform="translate(252 128) rotate(-43)"><circle r="30" fill="#a44bc4"/></g><g transform="translate(304 80) rotate(-43)"><rect x="-26" y="-28" width="52" height="56" rx="12" fill="#e2552b"/></g></g></g>
+<path d="M58 360c40 20 150 20 200 0" stroke="#14110f" stroke-width="6" stroke-linecap="round"/><path d="M280 322a44 44 0 0 1 80 0z" fill="#ffe14d" ${K}/></svg>`,
+frites:`<svg viewBox="0 0 400 400" fill="none"><g ${K}><path d="M118 60l22 170h-32L92 70z" fill="#ffd34d"/><path d="M174 28l12 202h-34l-4-202z" fill="#ffc737"/><path d="M232 44l-8 186h34l12-178z" fill="#ffd34d"/><path d="M290 80l-26 150h32l30-142z" fill="#ffc737"/><path d="M78 112l30 118H80L56 124z" fill="#ffc737"/></g><g fill="#f7f2e5" ${k4}><rect x="130" y="130" width="34" height="28" rx="5" transform="rotate(-12 130 130)"/><rect x="214" y="100" width="36" height="28" rx="5" transform="rotate(14 214 100)"/><rect x="170" y="176" width="32" height="26" rx="5"/><rect x="258" y="170" width="30" height="26" rx="5" transform="rotate(10 258 170)"/></g><g fill="#8aa83a"><circle cx="190" cy="120" r="5"/><circle cx="150" cy="190" r="5"/><circle cx="240" cy="160" r="5"/><circle cx="278" cy="126" r="5"/></g><path d="M62 214h276l-26 160H88z" fill="#2f6bff" ${K}/><path d="M200 246l50 54-50 54-50-54z" fill="#f7f2e5" ${K}/></svg>`,
+salade:`<svg viewBox="0 0 400 400" fill="none"><g ${K}><rect x="130" y="80" width="140" height="76" rx="12" fill="#fffbe8" transform="rotate(-6 200 118)"/></g><g fill="#8aa83a" ${k4}><circle cx="110" cy="170" r="24"/><circle cx="296" cy="164" r="22"/></g><g fill="#e2552b" ${K}><path d="M84 200c10-40 60-52 84-26z"/><path d="M232 176c26-24 74-14 86 24z"/></g><path d="M44 196h312c0 100-62 164-156 164S44 296 44 196z" fill="#f7f2e5" ${K}/><g fill="#e2552b" ${k4}><path d="M92 234c16-30 52-28 62 4z"/><path d="M250 228c20-26 52-18 60 12z"/></g><g fill="#8aa83a" ${k4}><circle cx="190" cy="250" r="22"/><circle cx="232" cy="294" r="18"/><circle cx="130" cy="290" r="18"/></g><g fill="#3b2a4a" ${k4}><ellipse cx="166" cy="296" rx="16" ry="12"/><ellipse cx="270" cy="262" rx="15" ry="11"/></g><g fill="#a44bc4" opacity=".8"><path d="M200 214a30 30 0 0 1 56 8" stroke="#a44bc4" stroke-width="7" fill="none"/></g></svg>`,
+mezze:`<svg viewBox="0 0 400 400" fill="none"><g ${K}><path d="M260 70l100 120-120 30z" fill="#f2b861"/><path d="M60 82l110 20-30 130z" fill="#f2b861"/></g><path d="M44 218h312c-8 80-66 140-156 140S52 298 44 218z" fill="#2f6bff" ${K}/><ellipse cx="200" cy="218" rx="156" ry="44" fill="#f7f2e5" ${K}/><path d="M120 218c30-26 60 16 90-4s52-20 70 4" stroke="#8aa83a" stroke-width="9" stroke-linecap="round" fill="none"/><circle cx="270" cy="212" r="15" fill="#8aa83a" ${k4}/><circle cx="150" cy="226" r="9" fill="#3b2a4a" ${k4}/><path d="M196 130c-8-24 18-44 22-70" stroke="#8aa83a" stroke-width="8" stroke-linecap="round"/></svg>`,
+baklava:`<svg viewBox="0 0 400 400" fill="none"><path d="M200 70l150 90-150 90L50 160z" fill="#ffd36a" ${K}/><path d="M50 160v50l150 90 150-90v-50l-150 90z" fill="#f2b861" ${K}/><path d="M50 185l150 90 150-90M50 208l150 90 150-90" stroke="#14110f" stroke-width="4" opacity=".55"/><path d="M200 70l150 90-150 90L50 160z" fill="none" ${K}/><g fill="#8aa83a" ${k4}><circle cx="170" cy="150" r="14"/><circle cx="224" cy="140" r="12"/><circle cx="200" cy="184" r="14"/><circle cx="262" cy="170" r="11"/><circle cx="138" cy="176" r="10"/></g><path d="M130 168c10 40 22 60 18 90M268 196c-6 30 4 50 0 70" stroke="#ff9c1a" stroke-width="10" stroke-linecap="round" opacity=".9"/></svg>`,
+frappe:`<svg viewBox="0 0 400 400" fill="none"><path d="M258 20l28 8-48 160" stroke="#14110f" stroke-width="24" stroke-linecap="round"/><path d="M258 20l28 8-48 160" stroke="#e2552b" stroke-width="12" stroke-linecap="round"/><path d="M110 120h180l-24 250H134z" fill="#8a4a22" ${K}/><path d="M104 120h192l-6 66H110z" fill="#f7f2e5" ${K}/><path d="M104 120c0-30 40-34 52-18 14-20 56-20 66 0 20-14 64-8 74 18z" fill="#f7f2e5" ${K}/><g fill="#f7f2e5" opacity=".85" ${k4}><rect x="150" y="230" width="44" height="40" rx="8" transform="rotate(-10 150 230)"/><rect x="206" y="288" width="40" height="38" rx="8" transform="rotate(12 206 288)"/></g></svg>`
+};
+const HERO=[["gyros","Gyros Kantina","Signature"],["souvlaki","Souvlaki","Flamme"],["frites","Frites Feta","Origan"],["salade","Salade Grecque","Fraîche"],["baklava","Baklava","Miel"],["frappe","Frappé","Glacé"]];
+const FLOAT={
+ olive:`<svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="20" ry="26" fill="#3b2a4a" stroke="#14110f" stroke-width="4"/><circle cx="30" cy="10" r="7" fill="#e2552b" stroke="#14110f" stroke-width="3"/><ellipse cx="22" cy="24" rx="4" ry="8" fill="#fff" opacity=".35"/></svg>`,
+ feta:`<svg viewBox="0 0 60 60"><path d="M6 24l24-12 24 12v22l-24 10L6 46z" fill="#fffbe8" stroke="#14110f" stroke-width="4" stroke-linejoin="round"/><path d="M6 24l24 12 24-12M30 36v20" stroke="#14110f" stroke-width="3" fill="none"/></svg>`,
+ tomato:`<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="25" fill="#e2552b" stroke="#14110f" stroke-width="4"/><circle cx="30" cy="30" r="14" fill="#ff8a5b" stroke="#14110f" stroke-width="3"/><path d="M30 6v18M12 40l16-10M48 40L32 30" stroke="#14110f" stroke-width="2.5"/></svg>`,
+ lemon:`<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="25" fill="#ffe14d" stroke="#14110f" stroke-width="4"/><circle cx="30" cy="30" r="19" fill="#fff3a0"/><path d="M30 12v36M12 30h36M17 17l26 26M43 17L17 43" stroke="#ffe14d" stroke-width="3"/></svg>`,
+ leaf:`<svg viewBox="0 0 60 60"><path d="M8 52C8 20 28 6 54 6c0 28-14 48-46 46z" fill="#8aa83a" stroke="#14110f" stroke-width="4" stroke-linejoin="round"/><path d="M10 50L40 20" stroke="#14110f" stroke-width="3"/></svg>`,
+ pita:`<svg viewBox="0 0 60 60"><path d="M4 48C4 20 20 8 56 8c0 32-14 44-52 40z" fill="#f2b861" stroke="#14110f" stroke-width="4" stroke-linejoin="round"/><circle cx="26" cy="30" r="2.5" fill="#c98b4a"/><circle cx="38" cy="22" r="2.5" fill="#c98b4a"/><circle cx="22" cy="40" r="2.5" fill="#c98b4a"/></svg>`,
+ star:`<svg viewBox="0 0 60 60"><path d="M30 3l8 19 20 8-20 8-8 19-8-19-20-8 20-8z" fill="#ffc737" stroke="#14110f" stroke-width="4" stroke-linejoin="round"/></svg>`
+};
+const FPOS=[["olive","6%","30%","54px",.9],["tomato","86%","26%","78px",1.2],["leaf","14%","68%","66px",1.5],["feta","80%","64%","72px",1.0],["lemon","44%","8%","62px",.6],["pita","92%","8%","70px",.7],["star","28%","14%","40px",1.7],["olive","70%","80%","40px",1.9],["tomato","3%","86%","50px",.5],["leaf","56%","86%","44px",1.3],["star","62%","24%","30px",1.4],["feta","24%","88%","46px",1.6]];
+
+/* ---------- build static parts ---------- */
+const STARSVG='<svg viewBox="0 0 60 60"><path d="M30 3l8 19 20 8-20 8-8 19-8-19-20-8 20-8z" fill="#ffc737" stroke="#14110f" stroke-width="5" stroke-linejoin="round"/></svg>';
+const logoHTML=KANTINA.logoUrl?`<img src="${KANTINA.logoUrl}" alt="${KANTINA.nom}">`:`${STARSVG}<span>${KANTINA.nom}</span>`;
+$('#logo').innerHTML=logoHTML;$('#flogo').innerHTML=logoHTML;
+$('#ht').innerHTML=[...KANTINA.nom.toUpperCase()].map((c,i)=>`<span style="--k:${i}">${c}</span>`).join('');
+$('#floaters').innerHTML=FPOS.map((f,i)=>`<div class="fl" data-d="${f[4]}" style="--x:${f[1]};--y:${f[2]};--w:${f[3]};--t:${5+i%4}s;--dl:${-i*.7}s">${FLOAT[f[0]]}</div>`).join('');
+$('#ring').innerHTML=HERO.map((h,i)=>`<div class="it" style="--i:${i}"><div class="cd">${ART[h[0]]}<b>${h[1]}</b><small>${h[2]}</small></div></div>`).join('');
+$('#mqi').innerHTML=Array(2).fill(['Gyros','Souvlaki','Frites feta','Salade grecque','Baklava','Frappé'].map(x=>`<span>${x}</span><em>★</em>`).join('')+['Huile d\'olive','Origan','Feta'].map(x=>`<span>${x}</span><em>★</em>`).join('')).join('').repeat(2);
+$('#trio').innerHTML=[['olive',"Huile d'olive","Le fil rouge"],['leaf',"Origan","Parfum de grillade"],['feta',"Feta","Fondante, salée"]].map(a=>`<div class="ing" data-p>${FLOAT[a[0]]}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
+const tel=KANTINA.telephone.replace(/\s/g,'');
+const ic=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+$('#clist').innerHTML=[
+ [`tel:+33${tel.slice(1)}`,ic('<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>'),KANTINA.telephone+' · appel ou SMS'],
+ [KANTINA.instagram,ic('<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>'),'Instagram · emplacements du truck'],
+ [KANTINA.facebook,ic('<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/>'),'Facebook · kantina.strasbourg'],
+ ['#contact',ic('<path d="M12 21s7-6 7-12a7 7 0 0 0-14 0c0 6 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>'),KANTINA.ville]
+].map(r=>`<li><a href="${r[0]}" ${r[0].startsWith('http')?'target="_blank" rel="noopener"':''}>${r[1]}<span>${r[2]}</span></a></li>`).join('');
+
+/* ---------- menu ---------- */
+let cat=0;
+function renderTabs(){$('#tabs').innerHTML=KANTINA.categories.map((c,i)=>`<button class="tab" role="tab" aria-selected="${i===cat}" data-i="${i}">${c.label}</button>`).join('');
+  $$('.tab').forEach(b=>b.onclick=()=>{cat=+b.dataset.i;renderTabs();renderGrid();});}
+function renderGrid(){const items=KANTINA.categories[cat].items;
+  $('#grid').innerHTML=items.map((it,i)=>`<button class="card" style="--k:${i}" data-i="${i}">${it.sig?'<span class="sg">Signature</span>':''}<span class="pr">${it.p}</span><div class="ar">${ART[it.art]}</div><h3 class="d">${it.n}</h3><p>${it.d}</p><div class="tg">${it.t.filter(x=>x!=='Signature').map(x=>`<i>${x}</i>`).join('')}</div><span class="glare"></span></button>`).join('');
+  $$('.card').forEach(c=>{c.onclick=()=>openModal(items[+c.dataset.i]);
+    c.addEventListener('pointermove',e=>{if(motion()===0)return;const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+      c.style.transform=`rotateY(${(x-.5)*18*motion()}deg) rotateX(${(.5-y)*14*motion()}deg) translateZ(10px)`;c.style.setProperty('--gx',x*100+'%');c.style.setProperty('--gy',y*100+'%');});
+    c.addEventListener('pointerleave',()=>{c.style.transform='';});});
+  bindHover();}
+function openModal(it){$('#ma').innerHTML=ART[it.art];$('#mt').textContent=it.n;$('#md').textContent=it.d+(document.body.classList.contains('prices')?'  ·  '+it.p:'');
+  $('#mg').innerHTML=it.t.map(x=>`<i>${x}</i>`).join('');$('#mo').classList.add('open');$('#mxx').focus();}
+$('#mxx').onclick=()=>$('#mo').classList.remove('open');$('#mo').onclick=e=>{if(e.target.id==='mo')$('#mo').classList.remove('open')};$('#mgo').onclick=()=>$('#mo').classList.remove('open');
+renderTabs();renderGrid();
+
+/* ---------- mobile menu / esc ---------- */
+function menu(o){$('#mm').classList.toggle('open',o);$('#bb').setAttribute('aria-expanded',o);document.body.style.overflow=o?'hidden':'';}
+$('#bb').onclick=()=>menu(true);$('#mx').onclick=()=>menu(false);$$('#mm a').forEach(a=>a.onclick=()=>menu(false));
+addEventListener('keydown',e=>{if(e.key==='Escape'){$('#mo').classList.remove('open');menu(false);$('#czp').classList.remove('open');}});
+
+/* ---------- customizer ---------- */
+function save(k,v){try{localStorage.setItem('kantina_'+k,v)}catch(e){}}
+function load(k,d){try{return localStorage.getItem('kantina_'+k)||d}catch(e){return d}}
+function setTheme(t){document.body.dataset.theme=t;$$('.sw button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t));save('theme',t);}
+function setPrices(v){document.body.classList.toggle('prices',v==='1');$$('#czpr button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v));save('prices',v);}
+function setMotion(v){document.body.dataset.motion=v;$$('#czm button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v));save('motion',v);}
+$$('.sw button').forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
+$$('#czpr button').forEach(b=>b.onclick=()=>setPrices(b.dataset.v));
+$$('#czm button').forEach(b=>b.onclick=()=>setMotion(b.dataset.v));
+$('#czb').onclick=()=>{const o=$('#czp').classList.toggle('open');$('#czb').setAttribute('aria-expanded',o);};
+setTheme(load('theme','egee'));setPrices(load('prices',KANTINA.afficherPrix?'1':'0'));
+setMotion(load('motion',matchMedia('(prefers-reduced-motion: reduce)').matches?'soft':'full'));
+const motion=()=>({full:1,soft:.4,off:0})[document.body.dataset.motion];
+
+/* ---------- 4D engine : souris + scroll + temps ---------- */
+const M={x:0,y:0,tx:0,ty:0};
+addEventListener('pointermove',e=>{M.tx=e.clientX/innerWidth-.5;M.ty=e.clientY/innerHeight-.5;});
+addEventListener('deviceorientation',e=>{if(e.gamma!=null){M.tx=Math.max(-.5,Math.min(.5,e.gamma/60));M.ty=Math.max(-.5,Math.min(.5,(e.beta-45)/90));}});
+let ang=0,vel=0,drag=false,lx=0,autoV=.18;
+const ring=$('#ring');
+ring.addEventListener('pointerdown',e=>{drag=true;lx=e.clientX;ring.setPointerCapture(e.pointerId);});
+ring.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-lx;lx=e.clientX;vel=dx*.35;ang+=dx*.35;});
+['pointerup','pointercancel'].forEach(ev=>ring.addEventListener(ev,()=>{drag=false;}));
+const floaters=$$('.fl'),ht=$('#ht'),scene=$('#scene'),hero=$('#hero'),pEls=$$('[data-p]');
+let lastSY=scrollY,t0=performance.now(),introT=0,mqx=0;const mqi=$('#mqi');
+function frame(now){
+  const m=motion(),sy=scrollY,dt=Math.min(40,now-t0);t0=now;
+  M.x+=(M.tx-M.x)*.07;M.y+=(M.ty-M.y)*.07;
+  const ie=introT?1-Math.pow(1-Math.min(1,Math.max(0,(now-introT-500)/2600)),3):0,iz=1-ie;
+  if(m>0&&sy<innerHeight*1.6){
+    if(!drag){vel*=.95;ang+=(autoV*m+vel)*(dt/16)+(sy-lastSY)*.25*m;}
+    ring.style.transform=`rotateX(-5deg) rotateY(${ang-iz*540}deg)`;
+    scene.style.opacity=Math.min(1,ie*2.5);scene.style.transform=`translateZ(${-iz*1500}px) rotateY(${M.x*22*m}deg) rotateX(${-M.y*14*m}deg) translateY(${sy*.12}px)`;
+    ht.style.transform=`translate3d(${M.x*-40*m}px,${sy*.35-M.y*20*m}px,${-sy*.5}px) scale(${1+sy*.0003})`;ht.style.opacity=Math.max(0,1-sy/(innerHeight*.9));
+    floaters.forEach(f=>{const d=+f.dataset.d;f.style.transform=`translate3d(${M.x*d*90*m}px,${M.y*d*70*m-sy*d*.28}px,0) rotate(${sy*d*.06+now*.004*d*m}deg) scale(${(1+d*.04)*ie})`;});
+  }
+  if(m>0){mqx-=(1.3+(sy-lastSY)*.9)*(m>.5?1:.5)*(dt/16);const hw=mqi.scrollWidth/2;if(hw){mqx=((mqx%hw)-hw)%hw;}mqi.style.transform=`translateX(${mqx}px)`;}
+  lastSY=sy;
+  pEls.forEach(el=>{const r=el.getBoundingClientRect();if(r.bottom<-200||r.top>innerHeight+200)return;el.style.setProperty('--p',Math.min(1,Math.max(0,(innerHeight-r.top)/(innerHeight+r.height))).toFixed(3));});
+  if(curOn){cx+=(mx-cx)*.2;cy+=(my-cy)*.2;cur.style.transform=`translate(${cx}px,${cy}px)`;}
+  requestAnimationFrame(frame);
+}
+/* header + active nav */
+function onScroll(){$('#hd').classList.toggle('sc',scrollY>20);let id='';for(const s of ['carte','chef','contact']){if(document.getElementById(s).getBoundingClientRect().top<innerHeight*.45)id=s;}
+  $$('nav.desk a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+id));}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+/* reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
+$$('.rv').forEach(el=>io.observe(el));
+/* cursor + magnetic */
+const cur=$('#cur');let mx=0,my=0,cx=0,cy=0,curOn=matchMedia('(hover:hover) and (pointer:fine)').matches;
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;});
+function bindHover(){$$('a,button,.card,.tab').forEach(el=>{if(el._b)return;el._b=1;el.addEventListener('pointerenter',()=>cur.classList.add('h'));el.addEventListener('pointerleave',()=>cur.classList.remove('h'));});
+  $$('.btn').forEach(b=>{if(b._m)return;b._m=1;b.addEventListener('pointermove',e=>{if(motion()===0)return;const r=b.getBoundingClientRect();b.style.translate=`${(e.clientX-r.left-r.width/2)*.18}px ${(e.clientY-r.top-r.height/2)*.25}px`;});b.addEventListener('pointerleave',()=>{b.style.translate=''});});}
+bindHover();
+/* event form → SMS */
+$('#ev').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);
+  const body=`Bonjour Kantina, demande de devis événement. Nom: ${f.get('n')}. Tél: ${f.get('t')||'-'}. Date: ${f.get('d')||'-'}. Invités: ${f.get('g')}. ${f.get('m')||''}`;
+  location.href=`sms:+33${tel.slice(1)}?&body=${encodeURIComponent(body)}`;};
+/* loader */
+let ln=0;const lv=setInterval(()=>{ln=Math.min(100,ln+4);$('#cnt').textContent=ln+'%';$('#bar').style.transform=`scaleX(${ln/100})`;},40);
+function go(){if(introT)return;clearInterval(lv);$('#cnt').textContent='100%';$('#bar').style.transform='scaleX(1)';$('#loader').classList.add('out');document.body.classList.add('go');introT=performance.now();}
+addEventListener('load',()=>setTimeout(go,1100));setTimeout(go,2800);
+/* titre : toujours sur une seule ligne, quelle que soit la taille d'écran */
+function fit(){const sp=ht.children;if(!sp.length)return;ht.style.fontSize='100px';const w=sp[sp.length-1].offsetLeft+sp[sp.length-1].offsetWidth-sp[0].offsetLeft;
+  ht.style.fontSize=Math.min(300,innerHeight*.3,100*innerWidth*.88/w)+'px';}
+fit();addEventListener('resize',fit);addEventListener('load',fit);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
